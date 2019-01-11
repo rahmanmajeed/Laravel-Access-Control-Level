@@ -27,4 +27,39 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    /**
+     * The relations is many to many relation between user and role.
+     * 
+     * @var array
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+    /**
+     * The relations is many to many rlation between user and permission.
+     * 
+     * @var array
+     * @param string
+     */
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class);
+    }
+    /**
+     * The relation is many to many polymorphic relation between user and role.
+     * @var array
+     */
+    public function roles_access()
+    {
+        return $this->morphedByMany(Role::class,'accessible');
+    }
+    /**
+     * The relation is many to many polymorphic relation between user and permission.
+     * @var array
+     */
+    public function permissions_access()
+    {
+        return $this->morphedByMany(Permission::class,'accessible');
+    }
 }
