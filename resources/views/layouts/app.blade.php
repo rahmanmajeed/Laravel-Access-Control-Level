@@ -49,6 +49,30 @@
                                 </li>
                             @endif
                         @else
+                        @hasRole(['Admin'])
+                        <li class="nav-item">
+                                <a class="nav-link" href="#">{{ __('ADMIN') }}</a>
+                            </li>
+                        @endhasRole
+                        @hasRole(['Manager'])
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                   Manager <span class="caret"></span>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="#"> {{ __('Create') }} </a>
+                                    <a class="dropdown-item" href="#"> {{ __('Read') }} </a>
+                                    <a class="dropdown-item" href="#"> {{ __('Update') }} </a>
+                                    <a class="dropdown-item" href="#"> {{ __('Delete') }} </a>
+                                </div>
+                            </li>
+                            @endhasRole
+                            @hasRole('User')
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">{{ __('User') }}</a>
+                            </li>
+                            @endhasRole
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>

@@ -5,6 +5,7 @@ trait UserTrait
     /**
      * @return bool
      * @param  roles
+     * @var array
      */
     public function hasAnyRole($roles)
     {
