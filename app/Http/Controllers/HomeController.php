@@ -29,7 +29,7 @@ class HomeController extends Controller
 
     public function userList()
     {
-        $users=User::with('roles.permissions')->get()->unique('slug');
+        $users=User::with('roles.permissions')->get()->unique();
         
         return $users;
     }

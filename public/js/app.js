@@ -1826,6 +1826,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1834,11 +1844,21 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     read: function read() {
+      var _this = this;
+
       axios.get('/userlist').then(function (response) {
-        console.log(response.data);
+        _this.users = response.data;
+        console.log(response.data[0].roles);
       }).catch(function (err) {
         console.log(err);
       });
+    },
+    getRoles: function getRoles(roles) {
+      var rolesString = ', ';
+      roles.forEach(function (role, index) {
+        rolesString = rolesString + role.name;
+      });
+      return rolesString;
     }
   },
   mounted: function mounted() {
@@ -36743,48 +36763,82 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", [
+    _c("div", { staticClass: "container" }, [
+      _c("div", { staticClass: "row justify-content-center" }, [
+        _c("div", { staticClass: "col-md-8" }, [
+          _c("div", { staticClass: "card" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _c("table", { staticClass: "table table-bordered" }, [
+                _vm._m(1),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  _vm._l(_vm.users, function(user, key) {
+                    return _c("tr", [
+                      _c("td", [_vm._v(_vm._s(++key))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(user.name))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(user.email))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(_vm.getRoles(user.roles)))]),
+                      _vm._v(" "),
+                      _c("td"),
+                      _vm._v(" "),
+                      _vm._m(2, true)
+                    ])
+                  }),
+                  0
+                )
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("div", { staticClass: "container" }, [
-        _c("div", { staticClass: "row justify-content-center" }, [
-          _c("div", { staticClass: "col-md-8" }, [
-            _c("div", { staticClass: "card" }, [
-              _c("div", { staticClass: "card-header" }, [
-                _vm._v("Dashboard "),
-                _c("button", { staticClass: "btn btn-primary float-right" }, [
-                  _vm._v("Create")
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "card-body" }, [
-                _c("table", { staticClass: "table table-bordered" }, [
-                  _c("thead", [
-                    _c("th", [_vm._v("no.")]),
-                    _vm._v(" "),
-                    _c("th", [_vm._v("Name")]),
-                    _vm._v(" "),
-                    _c("th", [_vm._v("E-mail")]),
-                    _vm._v(" "),
-                    _c("th", [_vm._v("Roles")]),
-                    _vm._v(" "),
-                    _c("th", [_vm._v("Permissions")]),
-                    _vm._v(" "),
-                    _c("th", [_vm._v("Action")])
-                  ]),
-                  _vm._v(" "),
-                  _c("tbody", [_c("tr")])
-                ])
-              ])
-            ])
-          ])
-        ])
+    return _c("div", { staticClass: "card-header" }, [
+      _vm._v("Dashboard "),
+      _c("button", { staticClass: "btn btn-primary float-right" }, [
+        _vm._v("Create")
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("th", [_vm._v("no.")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Name")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("E-mail")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Roles")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Permissions")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Action")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [
+      _c("button", { staticClass: "btn btn-info" }, [_vm._v("Edit")]),
+      _vm._v(" "),
+      _c("button", { staticClass: "btn btn-danger" }, [_vm._v("Delete")])
     ])
   }
 ]

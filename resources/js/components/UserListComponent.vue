@@ -18,7 +18,17 @@
                     <th>Action</th>
                     </thead>
                     <tbody>
-                    <tr></tr>
+                    <tr v-for="(user,key) in users">
+                        <td>{{++key}}</td>
+                        <td>{{user.name}}</td>
+                        <td>{{user.email}}</td>
+                        <td>{{getRoles(user.roles)}}</td>
+                        <td></td>
+                        <td>
+                        <button class="btn btn-info">Edit</button>
+                        <button class="btn btn-danger">Delete</button> 
+                        </td>
+                    </tr>
                     </tbody>
                     </table>
                 </div>
@@ -40,13 +50,27 @@ export default {
         read:function(){
             axios.get('/userlist')
             .then(response=>{
-                console.log(response.data);
+                
+               this.users=response.data;
+               console.log(response.data[0].roles);
             })
             .catch(err=>{
                 console.log(err);
             })
-        }
+        },
+        getRoles: function(roles) {
+         let rolesString = ', '
+         
+        roles.forEach((role, index) => {
+          
+            rolesString=rolesString+role.name;
+          
+                
+        })
+        return rolesString
     },
+    },
+    
     mounted:function(){
         this.read();
         console.log('Component Load');
