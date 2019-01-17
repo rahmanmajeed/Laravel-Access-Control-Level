@@ -1848,17 +1848,35 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/userlist').then(function (response) {
         _this.users = response.data;
-        console.log(response.data[0].roles);
+        console.log(response.data);
       }).catch(function (err) {
         console.log(err);
       });
     },
     getRoles: function getRoles(roles) {
-      var rolesString = ', ';
+      var rolesString = [];
       roles.forEach(function (role, index) {
-        rolesString = rolesString + role.name;
+        rolesString.push(role.name);
       });
-      return rolesString;
+      return rolesString.join(', ');
+    },
+    getPermissionsFromRoles: function getPermissionsFromRoles(roles) {
+      var permissionsList = [];
+      var rolesString = [];
+      roles.forEach(function (role, index) {
+        rolesString = role.permissions;
+        rolesString.forEach(function (permission, index) {
+          permissionsList.push(permission.name);
+        });
+      });
+      permissionsList = this.removeDuplicate(permissionsList);
+      return permissionsList.join(', ');
+    },
+    removeDuplicate: function removeDuplicate(permissions) {
+      var unique_array = permissions.filter(function (elem, index, self) {
+        return index == self.indexOf(elem);
+      });
+      return unique_array;
     }
   },
   mounted: function mounted() {
@@ -36766,7 +36784,7 @@ var render = function() {
   return _c("div", [
     _c("div", { staticClass: "container" }, [
       _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
+        _c("div", { staticClass: "col-md-12" }, [
           _c("div", { staticClass: "card" }, [
             _vm._m(0),
             _vm._v(" "),
@@ -36786,7 +36804,9 @@ var render = function() {
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(_vm.getRoles(user.roles)))]),
                       _vm._v(" "),
-                      _c("td"),
+                      _c("td", [
+                        _vm._v(_vm._s(_vm.getPermissionsFromRoles(user.roles)))
+                      ]),
                       _vm._v(" "),
                       _vm._m(2, true)
                     ])

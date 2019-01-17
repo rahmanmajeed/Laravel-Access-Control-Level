@@ -2,7 +2,7 @@
     <div>
         <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Dashboard <button class="btn btn-primary float-right">Create</button></div>
 
@@ -23,7 +23,7 @@
                         <td>{{user.name}}</td>
                         <td>{{user.email}}</td>
                         <td>{{getRoles(user.roles)}}</td>
-                        <td></td>
+                        <td>{{getPermissionsFromRoles(user.roles)}}</td>
                         <td>
                         <button class="btn btn-info">Edit</button>
                         <button class="btn btn-danger">Delete</button> 
@@ -52,23 +52,44 @@ export default {
             .then(response=>{
                 
                this.users=response.data;
-               console.log(response.data[0].roles);
+               console.log(response.data);
             })
             .catch(err=>{
                 console.log(err);
             })
         },
         getRoles: function(roles) {
-         let rolesString = ', '
+         let rolesString = []
          
         roles.forEach((role, index) => {
           
-            rolesString=rolesString+role.name;
+            rolesString.push(role.name);
           
                 
         })
-        return rolesString
-    },
+        return rolesString.join(', ')
+        },
+        getPermissionsFromRoles: function(roles) {
+            let permissionsList = []
+            let rolesString=[]
+               roles.forEach((role, index) => {
+                rolesString=role.permissions;
+                 rolesString.forEach((permission,index)=>{
+                      
+                     permissionsList.push(permission.name)
+                 })
+                 
+               
+        });
+            permissionsList = this.removeDuplicate(permissionsList)
+            return permissionsList.join(', ')
+        },
+        removeDuplicate: function(permissions){
+            let unique_array = permissions.filter(function(elem, index, self) {
+                return index == self.indexOf(elem);
+            });
+            return unique_array;
+        },
     },
     
     mounted:function(){
