@@ -22,7 +22,7 @@ Route::get('/userlist', 'HomeController@userList');
 
 Route::get('/admin','ADMIN\AppController@index')->name('admin.app');
 Route::get('/admin/create','ADMIN\AppController@create')->name('admin.app.create');
-Route::get('/admin/update','ADMIN\AppController@update')->name('admin.app.update');
+Route::get('/admin/{user}/update','ADMIN\AppController@update')->name('admin.app.update');
 Route::get('/admin/delete','ADMIN\AppController@delete')->name('admin.app.delete');
 
 

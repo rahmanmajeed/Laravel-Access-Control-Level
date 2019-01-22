@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Dashboard <button class="btn btn-primary float-right">Create</button></div>
-
+                    <update-modal v-show="ismodalOn" @closeModal="shutModal" :modalTitle="title"/>
                 <div class="card-body">
                    
                     <table class="table table-bordered">
@@ -25,8 +25,8 @@
                         <td>{{getRoles(user.roles)}}</td>
                         <td>{{getPermissionsFromRoles(user.roles)}}</td>
                         <td>
-                        <button class="btn btn-info">Edit</button>
-                        <button class="btn btn-danger">Delete</button> 
+                        <button class="btn btn-info" @click="userUpdate(user.id)" >Edit</button>
+                        <button class="btn btn-danger" @click="userDelete(user.id)">Delete</button> 
                         </td>
                     </tr>
                     </tbody>
@@ -39,11 +39,17 @@
     </div>
 </template>
 <script>
+import updateModal from './UpdateComponent';
 export default {
+    components:{
+        updateModal,
+    },
     data:function()
     {
         return{
             users:[],
+            ismodalOn:false,
+            title:'',
         }
     },
     methods: {
@@ -89,6 +95,27 @@ export default {
                 return index == self.indexOf(elem);
             });
             return unique_array;
+        },
+        userUpdate:function(user){
+            axios.get('/admin/'+user+'/update')
+            .then(response=>{
+                console.log(response.data);
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+            this.title="Update User";
+            this.ismodalOn=true;
+        },
+        userDelete:function(user){
+            this.title="Delete User";
+            this.ismodalOn=true;            
+        },
+        shutModal:function(){
+            this.ismodalOn=false;
+        },
+        showModal:function(){
+            this.ismodalOn=true;
         },
     },
     

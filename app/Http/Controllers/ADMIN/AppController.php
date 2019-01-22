@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\ADMIN;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -15,5 +16,11 @@ class AppController extends Controller
     public function index()
     {
         return "This is Admin Area";
+    }
+
+    public function update(User $user)
+    {
+        $data = $user->roles()->get();
+        return response()->json($data,201);
     }
 }
