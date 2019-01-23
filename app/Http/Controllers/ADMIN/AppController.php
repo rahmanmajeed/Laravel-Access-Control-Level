@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\ADMIN;
 
+use App\Role;
 use App\User;
+use App\Permission;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -20,7 +22,9 @@ class AppController extends Controller
 
     public function update(User $user)
     {
+        $roles=Role::all();
+        $permissions=Permission::all();
         $data = $user->roles()->get();
-        return response()->json($data,201);
+        return response()->json(['data'=>$data,'roles'=>$roles,'permissions'=>$permissions],201);
     }
 }

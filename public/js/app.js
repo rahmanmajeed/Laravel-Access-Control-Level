@@ -1838,6 +1838,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   // props:[
   //   'parentprops',
@@ -1847,11 +1856,19 @@ __webpack_require__.r(__webpack_exports__);
     modalTitle: {
       type: String,
       required: true
-    } //   user:{
-    //     type:[Array,Object],
-    //     required:true,
-    //   }
-
+    },
+    user: {
+      type: [Array, Object],
+      required: true
+    },
+    roles: {
+      type: [Array, Object],
+      required: true
+    },
+    permit: {
+      type: [Array, Object],
+      required: true
+    }
   },
   methods: {
     close: function close() {
@@ -1921,7 +1938,10 @@ __webpack_require__.r(__webpack_exports__);
     return {
       users: [],
       ismodalOn: false,
-      title: ''
+      title: '',
+      user: [],
+      roles: [],
+      permissions: []
     };
   },
   methods: {
@@ -1961,8 +1981,12 @@ __webpack_require__.r(__webpack_exports__);
       return unique_array;
     },
     userUpdate: function userUpdate(user) {
+      var _this2 = this;
+
       axios.get('/admin/' + user + '/update').then(function (response) {
-        console.log(response.data);
+        _this2.user = response.data.data;
+        _this2.roles = response.data.roles;
+        _this2.permissions = response.data.permissions;
       }).catch(function (err) {
         console.log(err);
       });
@@ -37545,6 +37569,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("form", [
+                  _vm._v("\n          " + _vm._s(_vm.roles) + "\n         "),
                   _c("div", { staticClass: "form-group" }, [
                     _c("label", [_vm._v("Name")]),
                     _vm._v(" "),
@@ -37568,14 +37593,47 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.roles,
+                            expression: "roles"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { multiple: "" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.roles = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          }
+                        }
+                      },
+                      _vm._l(_vm.roles, function(role) {
+                        return _c("option")
+                      }),
+                      0
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", [_vm._v("Permissions")]),
+                    _vm._v(" "),
+                    _c(
+                      "select",
                       { staticClass: "form-control", attrs: { multiple: "" } },
-                      [
-                        _c("option", [_vm._v("ABC")]),
-                        _vm._v(" "),
-                        _c("option", [_vm._v("CDE")]),
-                        _vm._v(" "),
-                        _c("option", [_vm._v("EFG")])
-                      ]
+                      [_c("option", [_vm._v("ABC")])]
                     )
                   ])
                 ])
@@ -37646,7 +37704,12 @@ var render = function() {
                     expression: "ismodalOn"
                   }
                 ],
-                attrs: { modalTitle: _vm.title },
+                attrs: {
+                  modalTitle: _vm.title,
+                  user: _vm.user,
+                  roles: _vm.roles,
+                  permit: _vm.permissions
+                },
                 on: { closeModal: _vm.shutModal }
               }),
               _vm._v(" "),

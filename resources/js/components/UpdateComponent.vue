@@ -12,6 +12,7 @@
       
       <div class="modal-body">
         <form>
+          {{roles}}
          <div class="form-group">
           <label>Name</label>
           <input name="name" class="form-control"/>
@@ -22,12 +23,20 @@
          </div>
          <div class="form-group">
           <label>Role</label>
-          <select multiple class="form-control">
-           <option>ABC</option>
-           <option>CDE</option>
-           <option>EFG</option>
+          <select multiple class="form-control" v-model="roles">
+           <option v-for="role in roles">
+           </option>
+      
           </select>
          </div>
+          <div class="form-group">
+          <label>Permissions</label>
+          <select multiple class="form-control">
+           <option>ABC</option>
+          
+          </select>
+         </div>
+        
         </form>
       </div>
       
@@ -52,10 +61,18 @@ export default {
         type:String,
         required:true,
       },
-    //   user:{
-    //     type:[Array,Object],
-    //     required:true,
-    //   }
+      user:{
+        type:[Array,Object],
+        required:true,
+      },
+      roles:{
+        type:[Array,Object],
+        required:true,
+      },
+      permit:{
+        type:[Array,Object],
+        required:true,
+      }
     },
     
     methods: {

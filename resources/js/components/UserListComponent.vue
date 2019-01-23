@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Dashboard <button class="btn btn-primary float-right">Create</button></div>
-                    <update-modal v-show="ismodalOn" @closeModal="shutModal" :modalTitle="title"/>
+                    <update-modal v-show="ismodalOn" @closeModal="shutModal" :modalTitle="title" :user="user" :roles="roles" :permit="permissions"/>
                 <div class="card-body">
                    
                     <table class="table table-bordered">
@@ -50,6 +50,9 @@ export default {
             users:[],
             ismodalOn:false,
             title:'',
+            user:[],
+            roles:[],
+            permissions:[],
         }
     },
     methods: {
@@ -99,7 +102,10 @@ export default {
         userUpdate:function(user){
             axios.get('/admin/'+user+'/update')
             .then(response=>{
-                console.log(response.data);
+                this.user=response.data.data;
+                this.roles=response.data.roles;
+                this.permissions=response.data.permissions;
+
             })
             .catch(err=>{
                 console.log(err);
