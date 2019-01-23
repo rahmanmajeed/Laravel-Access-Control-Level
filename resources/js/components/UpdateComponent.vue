@@ -48,6 +48,7 @@
   </div>
 </div>
 </transition> 
+<!--end modal-->
 </template>
 <script>
 export default {
