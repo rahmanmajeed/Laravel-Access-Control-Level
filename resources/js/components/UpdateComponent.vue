@@ -8,11 +8,14 @@
         <h4 class="modal-title">
           {{modalTitle}}
         </h4>
+        <button type="button" class="close" aria-label="Close" @click="close">
+        <span aria-hidden="true">&times;</span>
+      </button>
       </div>
       
       <div class="modal-body">
         <form>
-          {{roles}}
+          
          <div class="form-group">
           <label>Name</label>
           <input name="name" class="form-control"/>
@@ -23,17 +26,14 @@
          </div>
          <div class="form-group">
           <label>Role</label>
-          <select multiple class="form-control" v-model="roles">
-           <option v-for="role in roles">
-           </option>
-      
-          </select>
+          <select multiple v-model="mutableRoles" class="form-control">
+             <option v-for="(role,index) in roles">{{role.name}}</option>
+           </select>
          </div>
           <div class="form-group">
           <label>Permissions</label>
-          <select multiple class="form-control">
-           <option>ABC</option>
-          
+          <select multiple class="form-control" v-model="mutablePermissions">
+           <option v-for="(permission,index) in permit">{{permission.name}}</option> 
           </select>
          </div>
         
@@ -42,7 +42,7 @@
       
       <div class="modal-footer">
        <button type="button" class="btn btn-primary">Save</button>
-      <button type="button" class="btn btn-danger" @click="close">Close</button>
+       <button type="button" class="btn btn-danger" @click="close">Close</button>
       </div>
     </div>
   </div>
@@ -52,8 +52,9 @@
 <script>
 export default {
   // props:[
-  //   'parentprops',
-  //   'user'
+  //   'modalTitle',
+  //   'user',
+  //   'roles'
   // ],
 
     props:{
@@ -74,14 +75,28 @@ export default {
         required:true,
       }
     },
-    
+    data(){
+      return{
+       mutableRoles:[],
+       mutablePermissions:[],
+      }
+    },
+   
     methods: {
         close:function(){
             this.$emit('closeModal');
-        }
+        },
+        
     },
-
- 
+    watch: { 
+        roles() {
+           this.mutableRoles = this.roles;
+        },
+        permissions:function(){
+          this.mutablePermissions=this.permit
+        }
+        
+    }
 }
 </script>
 <style>

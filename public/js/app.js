@@ -1849,8 +1849,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   // props:[
-  //   'parentprops',
-  //   'user'
+  //   'modalTitle',
+  //   'user',
+  //   'roles'
   // ],
   props: {
     modalTitle: {
@@ -1870,9 +1871,23 @@ __webpack_require__.r(__webpack_exports__);
       required: true
     }
   },
+  data: function data() {
+    return {
+      mutableRoles: [],
+      mutablePermissions: []
+    };
+  },
   methods: {
     close: function close() {
       this.$emit('closeModal');
+    }
+  },
+  watch: {
+    roles: function roles() {
+      this.mutableRoles = this.roles;
+    },
+    permissions: function permissions() {
+      this.mutablePermissions = this.permit;
     }
   }
 });
@@ -37564,12 +37579,25 @@ var render = function() {
               _c("div", { staticClass: "modal-header" }, [
                 _c("h4", { staticClass: "modal-title" }, [
                   _vm._v("\n          " + _vm._s(_vm.modalTitle) + "\n        ")
-                ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: { type: "button", "aria-label": "Close" },
+                    on: { click: _vm.close }
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("×")
+                    ])
+                  ]
+                )
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("form", [
-                  _vm._v("\n          " + _vm._s(_vm.roles) + "\n         "),
                   _c("div", { staticClass: "form-group" }, [
                     _c("label", [_vm._v("Name")]),
                     _vm._v(" "),
@@ -37598,8 +37626,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.roles,
-                            expression: "roles"
+                            value: _vm.mutableRoles,
+                            expression: "mutableRoles"
                           }
                         ],
                         staticClass: "form-control",
@@ -37614,14 +37642,14 @@ var render = function() {
                                 var val = "_value" in o ? o._value : o.value
                                 return val
                               })
-                            _vm.roles = $event.target.multiple
+                            _vm.mutableRoles = $event.target.multiple
                               ? $$selectedVal
                               : $$selectedVal[0]
                           }
                         }
                       },
-                      _vm._l(_vm.roles, function(role) {
-                        return _c("option")
+                      _vm._l(_vm.roles, function(role, index) {
+                        return _c("option", [_vm._v(_vm._s(role.name))])
                       }),
                       0
                     )
@@ -37632,8 +37660,37 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "select",
-                      { staticClass: "form-control", attrs: { multiple: "" } },
-                      [_c("option", [_vm._v("ABC")])]
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.mutablePermissions,
+                            expression: "mutablePermissions"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { multiple: "" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.mutablePermissions = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          }
+                        }
+                      },
+                      _vm._l(_vm.permit, function(permission, index) {
+                        return _c("option", [_vm._v(_vm._s(permission.name))])
+                      }),
+                      0
                     )
                   ])
                 ])
