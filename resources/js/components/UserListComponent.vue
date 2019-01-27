@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Dashboard <button class="btn btn-primary float-right">Create</button></div>
-                    <update-modal v-show="ismodalOn" @closeModal="shutModal" :modalTitle="title" :user="user" :roles="roles" :permit="permissions"/>
+                    <update-modal v-show="ismodalOn" @closeModal="shutModal" :modalTitle="title" :userdata="userdata" :user="user" :roles="roles" :permit="permissions"/>
                 <div class="card-body">
                    
                     <table class="table table-bordered">
@@ -51,6 +51,7 @@ export default {
             ismodalOn:false,
             title:'',
             user:[],
+            userdata:[],
             roles:[],
             permissions:[],
         }
@@ -61,7 +62,6 @@ export default {
             .then(response=>{
                 
                this.users=response.data;
-               console.log(response.data);
             })
             .catch(err=>{
                 console.log(err);
@@ -102,9 +102,10 @@ export default {
         userUpdate:function(user){
             axios.get('/admin/'+user+'/update')
             .then(response=>{
-                this.user=response.data.data;
+                this.userRoles(response.data.userdata);
                 this.roles=response.data.roles;
                 this.permissions=response.data.permissions;
+                this.user=response.data.user;
 
             })
             .catch(err=>{
@@ -112,6 +113,12 @@ export default {
             })
             this.title="Update User";
             this.ismodalOn=true;
+        },
+        userRoles:function(roles){
+            this.userdata=[];
+            roles.forEach((role,index)=>{
+                this.userdata.push(role.id);
+            })
         },
         userDelete:function(user){
             this.title="Delete User";

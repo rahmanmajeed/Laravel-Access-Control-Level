@@ -1847,6 +1847,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   // props:[
   //   'modalTitle',
@@ -1862,6 +1866,10 @@ __webpack_require__.r(__webpack_exports__);
       type: [Array, Object],
       required: true
     },
+    userdata: {
+      type: [Array, Object],
+      required: true
+    },
     roles: {
       type: [Array, Object],
       required: true
@@ -1874,22 +1882,23 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       mutableRoles: [],
-      mutablePermissions: []
+      mutablePermissions: [],
+      userRoles: this.userdata,
+      userPermissions: []
     };
   },
+  created: function created() {},
   methods: {
     close: function close() {
       this.$emit('closeModal');
+    },
+    changeValue: function changeValue() {
+      console.log("test");
     }
   },
-  watch: {
-    roles: function roles() {
-      this.mutableRoles = this.roles;
-    },
-    permissions: function permissions() {
-      this.mutablePermissions = this.permit;
-    }
-  }
+  computed: {},
+  watch: {},
+  mounted: function mounted() {}
 });
 
 /***/ }),
@@ -1955,6 +1964,7 @@ __webpack_require__.r(__webpack_exports__);
       ismodalOn: false,
       title: '',
       user: [],
+      userdata: [],
       roles: [],
       permissions: []
     };
@@ -1965,7 +1975,6 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/userlist').then(function (response) {
         _this.users = response.data;
-        console.log(response.data);
       }).catch(function (err) {
         console.log(err);
       });
@@ -1999,14 +2008,24 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios.get('/admin/' + user + '/update').then(function (response) {
-        _this2.user = response.data.data;
+        _this2.userRoles(response.data.userdata);
+
         _this2.roles = response.data.roles;
         _this2.permissions = response.data.permissions;
+        _this2.user = response.data.user;
       }).catch(function (err) {
         console.log(err);
       });
       this.title = "Update User";
       this.ismodalOn = true;
+    },
+    userRoles: function userRoles(roles) {
+      var _this3 = this;
+
+      this.userdata = [];
+      roles.forEach(function (role, index) {
+        _this3.userdata.push(role.id);
+      });
     },
     userDelete: function userDelete(user) {
       this.title = "Delete User";
@@ -37598,12 +37617,14 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("form", [
+                  _vm._v("\n          " + _vm._s(_vm.userdata) + "\n         "),
                   _c("div", { staticClass: "form-group" }, [
                     _c("label", [_vm._v("Name")]),
                     _vm._v(" "),
                     _c("input", {
                       staticClass: "form-control",
-                      attrs: { name: "name" }
+                      attrs: { name: "name" },
+                      domProps: { value: _vm.user.name }
                     })
                   ]),
                   _vm._v(" "),
@@ -37612,13 +37633,16 @@ var render = function() {
                     _vm._v(" "),
                     _c("input", {
                       staticClass: "form-control",
-                      attrs: { name: "email" }
+                      attrs: { name: "email" },
+                      domProps: { value: _vm.user.email }
                     })
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "form-group" }, [
                     _c("label", [_vm._v("Role")]),
-                    _vm._v(" "),
+                    _vm._v(
+                      "\n          " + _vm._s(_vm.userRoles) + "\n          "
+                    ),
                     _c(
                       "select",
                       {
@@ -37633,23 +37657,28 @@ var render = function() {
                         staticClass: "form-control",
                         attrs: { multiple: "" },
                         on: {
-                          change: function($event) {
-                            var $$selectedVal = Array.prototype.filter
-                              .call($event.target.options, function(o) {
-                                return o.selected
-                              })
-                              .map(function(o) {
-                                var val = "_value" in o ? o._value : o.value
-                                return val
-                              })
-                            _vm.mutableRoles = $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
-                          }
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.mutableRoles = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            },
+                            _vm.changeValue
+                          ]
                         }
                       },
                       _vm._l(_vm.roles, function(role, index) {
-                        return _c("option", [_vm._v(_vm._s(role.name))])
+                        return _c("option", { domProps: { value: role.id } }, [
+                          _vm._v(_vm._s(role.name))
+                        ])
                       }),
                       0
                     )
@@ -37688,7 +37717,11 @@ var render = function() {
                         }
                       },
                       _vm._l(_vm.permit, function(permission, index) {
-                        return _c("option", [_vm._v(_vm._s(permission.name))])
+                        return _c(
+                          "option",
+                          { domProps: { value: permission.id } },
+                          [_vm._v(_vm._s(permission.name))]
+                        )
                       }),
                       0
                     )
@@ -37763,6 +37796,7 @@ var render = function() {
                 ],
                 attrs: {
                   modalTitle: _vm.title,
+                  userdata: _vm.userdata,
                   user: _vm.user,
                   roles: _vm.roles,
                   permit: _vm.permissions

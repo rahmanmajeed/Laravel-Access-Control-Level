@@ -25,6 +25,6 @@ class AppController extends Controller
         $roles=Role::all();
         $permissions=Permission::all();
         $data = $user->roles()->get();
-        return response()->json(['data'=>$data,'roles'=>$roles,'permissions'=>$permissions],201);
+        return response()->json(['user'=>$user,'userdata'=>$data,'roles'=>$roles,'permissions'=>$permissions],201);
     }
 }
