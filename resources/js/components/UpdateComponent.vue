@@ -15,7 +15,7 @@
       
       <div class="modal-body">
         <form>
-          {{userdata}}
+        
          <div class="form-group">
           <label>Name</label>
           <input name="name" class="form-control" v-bind:value="user.name"/>
@@ -27,10 +27,10 @@
          <div class="form-group">
           <label>Role</label>
           {{userRoles}}
-          <select multiple v-model="mutableRoles" class="form-control"  @change="changeValue">
-       
+          <select multiple v-model="userRoles" class="form-control"  >
+                {{datauser}}
                <option v-for="(role,index) in roles" v-bind:value="role.id">{{role.name}}</option>
-    
+
            </select>
          </div>
           <div class="form-group">
@@ -70,7 +70,7 @@ export default {
         type:[Array,Object],
         required:true,
       },
-      userdata:{
+      mutableRoles:{
         type:[Array,Object],
         required:true,
       },
@@ -85,9 +85,9 @@ export default {
     },
     data(){
       return{
-       mutableRoles:[],
+       
        mutablePermissions:[],
-       userRoles:this.userdata,
+       userRoles:[],
        userPermissions:[],
       }
     },
@@ -100,16 +100,17 @@ export default {
             this.$emit('closeModal');
           
         },
-         changeValue(){
-      console.log("test");
+        changeValue(){
+        this.userRoles=this.mutableRoles
       },
         
     },
     computed: {
-     
+        datauser:function(){
+          this.userRoles=this.mutableRoles
+        }
     },
-    watch: { 
-       
+    watch: {    
     },
     mounted() {
      

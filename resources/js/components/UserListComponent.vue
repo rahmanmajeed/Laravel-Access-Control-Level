@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Dashboard <button class="btn btn-primary float-right">Create</button></div>
-                    <update-modal v-show="ismodalOn" @closeModal="shutModal" :modalTitle="title" :userdata="userdata" :user="user" :roles="roles" :permit="permissions"/>
+                    <update-modal v-show="ismodalOn" @closeModal="shutModal" :modalTitle="title" :mutable-roles="userdata" :user="user" :roles="roles" :permit="permissions"/>
                 <div class="card-body">
                    
                     <table class="table table-bordered">

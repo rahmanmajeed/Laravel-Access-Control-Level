@@ -1866,7 +1866,7 @@ __webpack_require__.r(__webpack_exports__);
       type: [Array, Object],
       required: true
     },
-    userdata: {
+    mutableRoles: {
       type: [Array, Object],
       required: true
     },
@@ -1881,9 +1881,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      mutableRoles: [],
       mutablePermissions: [],
-      userRoles: this.userdata,
+      userRoles: [],
       userPermissions: []
     };
   },
@@ -1893,10 +1892,14 @@ __webpack_require__.r(__webpack_exports__);
       this.$emit('closeModal');
     },
     changeValue: function changeValue() {
-      console.log("test");
+      this.userRoles = this.mutableRoles;
     }
   },
-  computed: {},
+  computed: {
+    datauser: function datauser() {
+      this.userRoles = this.mutableRoles;
+    }
+  },
   watch: {},
   mounted: function mounted() {}
 });
@@ -37617,7 +37620,6 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("form", [
-                  _vm._v("\n          " + _vm._s(_vm.userdata) + "\n         "),
                   _c("div", { staticClass: "form-group" }, [
                     _c("label", [_vm._v("Name")]),
                     _vm._v(" "),
@@ -37650,37 +37652,43 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.mutableRoles,
-                            expression: "mutableRoles"
+                            value: _vm.userRoles,
+                            expression: "userRoles"
                           }
                         ],
                         staticClass: "form-control",
                         attrs: { multiple: "" },
                         on: {
-                          change: [
-                            function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.mutableRoles = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            },
-                            _vm.changeValue
-                          ]
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.userRoles = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          }
                         }
                       },
-                      _vm._l(_vm.roles, function(role, index) {
-                        return _c("option", { domProps: { value: role.id } }, [
-                          _vm._v(_vm._s(role.name))
-                        ])
-                      }),
-                      0
+                      [
+                        _vm._v(
+                          "\n                " +
+                            _vm._s(_vm.datauser) +
+                            "\n               "
+                        ),
+                        _vm._l(_vm.roles, function(role, index) {
+                          return _c(
+                            "option",
+                            { domProps: { value: role.id } },
+                            [_vm._v(_vm._s(role.name))]
+                          )
+                        })
+                      ],
+                      2
                     )
                   ]),
                   _vm._v(" "),
@@ -37796,7 +37804,7 @@ var render = function() {
                 ],
                 attrs: {
                   modalTitle: _vm.title,
-                  userdata: _vm.userdata,
+                  "mutable-roles": _vm.userdata,
                   user: _vm.user,
                   roles: _vm.roles,
                   permit: _vm.permissions
