@@ -1883,7 +1883,10 @@ __webpack_require__.r(__webpack_exports__);
     return {
       mutablePermissions: [],
       userRoles: [],
-      userPermissions: []
+      userPermissions: [],
+      username: this.user.name,
+      email: '',
+      id: ''
     };
   },
   created: function created() {},
@@ -1891,8 +1894,8 @@ __webpack_require__.r(__webpack_exports__);
     close: function close() {
       this.$emit('closeModal');
     },
-    changeValue: function changeValue() {
-      this.userRoles = this.mutableRoles;
+    updateUser: function updateUser() {
+      return this.username;
     }
   },
   computed: {
@@ -1901,7 +1904,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   watch: {},
-  mounted: function mounted() {}
+  mounted: function mounted() {
+    console.log(user);
+  }
 });
 
 /***/ }),
@@ -6320,7 +6325,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.modal-mask {\r\n  position: fixed;\r\n  z-index: 9998;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  background-color: rgba(0, 0, 0, .5);\r\n  display: table;\r\n  transition: opacity .3s ease;\n}\r\n", ""]);
+exports.push([module.i, "\n.modal-mask {\r\n  position: fixed;\r\n  z-index: 9998;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  background-color: rgba(0, 0, 0, .5);\r\n  display: table;\r\n  transition: opacity .3s ease;\n}\n.modal-overflow {\r\n    overflow-y: scroll; \r\n    max-height:85%;  \r\n    margin-top: 50px; \r\n    margin-bottom:50px;\n}\r\n", ""]);
 
 // exports
 
@@ -37595,7 +37600,10 @@ var render = function() {
       [
         _c(
           "div",
-          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          {
+            staticClass: "modal-dialog modal-overflow",
+            attrs: { role: "document" }
+          },
           [
             _c("div", { staticClass: "modal-content" }, [
               _c("div", { staticClass: "modal-header" }, [
@@ -37624,9 +37632,25 @@ var render = function() {
                     _c("label", [_vm._v("Name")]),
                     _vm._v(" "),
                     _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.username,
+                          expression: "username"
+                        }
+                      ],
                       staticClass: "form-control",
                       attrs: { name: "name" },
-                      domProps: { value: _vm.user.name }
+                      domProps: { value: _vm.username },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.username = $event.target.value
+                        }
+                      }
                     })
                   ]),
                   _vm._v(" "),
@@ -37740,7 +37764,11 @@ var render = function() {
               _c("div", { staticClass: "modal-footer" }, [
                 _c(
                   "button",
-                  { staticClass: "btn btn-primary", attrs: { type: "button" } },
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: { click: _vm.updateUser }
+                  },
                   [_vm._v("Save")]
                 ),
                 _vm._v(" "),

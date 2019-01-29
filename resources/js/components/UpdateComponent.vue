@@ -2,7 +2,7 @@
       <!-- Modal -->
  <transition name="modal">
  <div class="modal modal-mask" style="display: block">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-overflow" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">
@@ -18,7 +18,7 @@
         
          <div class="form-group">
           <label>Name</label>
-          <input name="name" class="form-control" v-bind:value="user.name"/>
+          <input name="name" class="form-control"  v-model="username"/>
          </div>
          <div class="form-group">
           <label>E-mail</label>
@@ -44,7 +44,7 @@
       </div>
       
       <div class="modal-footer">
-       <button type="button" class="btn btn-primary">Save</button>
+       <button type="button" class="btn btn-primary" @click="updateUser">Save</button>
        <button type="button" class="btn btn-danger" @click="close">Close</button>
       </div>
     </div>
@@ -89,6 +89,9 @@ export default {
        mutablePermissions:[],
        userRoles:[],
        userPermissions:[],
+       username:this.user.name,
+       email:'',
+       id:''
       }
     },
     created() {
@@ -100,20 +103,21 @@ export default {
             this.$emit('closeModal');
           
         },
-        changeValue(){
-        this.userRoles=this.mutableRoles
-      },
+        updateUser:function(){
+          return this.username
+        }
         
     },
     computed: {
         datauser:function(){
           this.userRoles=this.mutableRoles
-        }
+        },
+        
     },
     watch: {    
     },
     mounted() {
-     
+     console.log(user)
     },
 }
 </script>
@@ -128,5 +132,11 @@ export default {
   background-color: rgba(0, 0, 0, .5);
   display: table;
   transition: opacity .3s ease;
+}
+.modal-overflow {
+    overflow-y: scroll; 
+    max-height:85%;  
+    margin-top: 50px; 
+    margin-bottom:50px;
 }
 </style>
